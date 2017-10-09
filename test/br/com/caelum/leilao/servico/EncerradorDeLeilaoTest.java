@@ -6,10 +6,7 @@ import br.com.caelum.leilao.infra.dao.LeilaoDao;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -57,5 +54,16 @@ public class EncerradorDeLeilaoTest {
         assertEquals(0, encerrador.getTotalEncerrados());
         assertFalse(leilao1.isEncerrado());
         assertFalse(leilao2.isEncerrado());
+    }
+
+    @Test
+    public void casoNaoHajaNenhumLeilaoEncerradorNaoFazNada(){
+        LeilaoDao daoFalso = mock(LeilaoDao.class);
+        when(daoFalso.correntes()).thenReturn(new ArrayList<Leilao>());
+
+        EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+        encerrador.encerra();
+
+        assertEquals(0, encerrador.getTotalEncerrados());
     }
 }
