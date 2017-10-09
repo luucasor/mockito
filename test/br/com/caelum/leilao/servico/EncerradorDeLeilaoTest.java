@@ -31,9 +31,9 @@ public class EncerradorDeLeilaoTest {
         EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
         encerrador.encerra();
 
+        assertEquals(2, encerrador.getTotalEncerrados());
         assertTrue(leilao1.isEncerrado());
         assertTrue(leilao2.isEncerrado());
-        assertEquals(2, encerrador.getTotalEncerrados());
     }
 
     @Test
