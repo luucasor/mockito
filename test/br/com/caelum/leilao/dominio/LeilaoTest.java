@@ -63,13 +63,4 @@ public class LeilaoTest {
 		assertEquals(10, leilao.getLances().size());
 		assertEquals(11000.0, leilao.getLances().get(leilao.getLances().size()-1).getValor(), 0.00001);
 	}
-
-	@Test
-	public void mockLeilaoMetodoTeste(){
-		String fraseMock = "Mockado com sucesso";
-		LeilaoDao leilaoDaoFalso = mock(LeilaoDao.class);
-		when(leilaoDaoFalso.teste()).thenReturn(fraseMock);
-
-		assertEquals(leilaoDaoFalso.teste(), fraseMock);
-	}
 }

@@ -133,5 +133,4 @@ public class LeilaoDao {
 	
 	public int x() { return 10; }
 
-	public static String teste() { return "teste"; }
 }
