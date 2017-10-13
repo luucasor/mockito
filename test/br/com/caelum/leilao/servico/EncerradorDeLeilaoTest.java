@@ -12,9 +12,7 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class EncerradorDeLeilaoTest {
 
@@ -82,6 +80,6 @@ public class EncerradorDeLeilaoTest {
         EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
         encerrador.encerra();
 
-        verify(daoFalso).atualiza(leilao);
+        verify(daoFalso, times(1)).atualiza(leilao);
     }
 }
