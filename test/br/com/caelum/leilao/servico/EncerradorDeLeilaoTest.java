@@ -13,6 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class EncerradorDeLeilaoTest {
@@ -66,5 +67,21 @@ public class EncerradorDeLeilaoTest {
         encerrador.encerra();
 
         assertEquals(0, encerrador.getTotalEncerrados());
+    }
+
+    @Test
+    public void deveAtualizarLeiloesEncerrados(){
+        Calendar antiga = Calendar.getInstance();
+        antiga.set(1999, 1, 20);
+
+        Leilao leilao = new CriadorDeLeilao().para("TV de Plasma").naData(antiga).constroi();
+
+        RepositorioDeLeiloes daoFalso = mock(RepositorioDeLeiloes.class);
+        when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao));
+
+        EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+        encerrador.encerra();
+
+        verify(daoFalso).atualiza(leilao);
     }
 }
