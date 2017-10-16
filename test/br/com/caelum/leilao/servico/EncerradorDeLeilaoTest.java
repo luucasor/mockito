@@ -135,4 +135,12 @@ public class EncerradorDeLeilaoTest {
         verify(carteiroFalso).envia(leilao1);
         verify(carteiroFalso).envia(leilao2);
     }
+
+    @Test
+    public void deveContinuarExecucaoMesmoQuandoTodosOsRegistrosFalham(){
+        when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+        doThrow(new RuntimeException()).when(carteiroFalso).envia(any(Leilao.class));
+
+        verify(daoFalso, never()).atualiza(any(Leilao.class));
+    }
 }
