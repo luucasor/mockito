@@ -114,15 +114,25 @@ public class EncerradorDeLeilaoTest {
     }
 
     @Test
-    public void deveContinuarAExecucaoMesmoQuandoDaoFalha(){
+    public void deveContinuarExecucaoMesmoQuandoDaoFalha(){
         when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
         doThrow(new RuntimeException()).when(daoFalso).atualiza(leilao1);
-
         encerrador.encerra();
 
         verify(daoFalso).atualiza(leilao2);
         verify(carteiroFalso).envia(leilao2);
         verify(carteiroFalso, times(0)).envia(leilao1);
     }
-    
+
+    @Test
+    public void deveContinuarExecucaoMesmoQuandoEmailFalha(){
+        when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+        doThrow(new RuntimeException()).when(carteiroFalso).envia(leilao1);
+        encerrador.encerra();
+
+        verify(daoFalso).atualiza(leilao1);
+        verify(daoFalso).atualiza(leilao2);
+        verify(carteiroFalso).envia(leilao1);
+        verify(carteiroFalso).envia(leilao2);
+    }
 }
