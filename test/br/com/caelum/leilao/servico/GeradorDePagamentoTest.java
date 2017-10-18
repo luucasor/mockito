@@ -44,7 +44,7 @@ public class GeradorDePagamentoTest {
     }
 
     @Test
-    public void deveEmpurrarParaOProximoDiaUtil(){
+    public void deveEmpurrarSabadoParaOProximoDiaUtil(){
         RepositorioDeLeiloes leiloes = mock(RepositorioDeLeiloes.class);
         RepositorioDePagamentos pagamentos = mock(RepositorioDePagamentos.class);
         Relogio relogio = mock(Relogio.class);
@@ -53,6 +53,37 @@ public class GeradorDePagamentoTest {
         sabado.set(2012, Calendar.APRIL, 7);
 
         when(relogio.hoje()).thenReturn(sabado);
+
+        Leilao leilao = new CriadorDeLeilao()
+                .para("Playstation")
+                .lance(new Usuario("José"), 2000.0)
+                .lance(new Usuario("Maria"), 2500.0)
+                .constroi();
+
+        when(leiloes.encerrados()).thenReturn(Arrays.asList(leilao));
+
+        GeradorDePagamento gerador = new GeradorDePagamento(leiloes, pagamentos, new Avaliador(), relogio);
+        gerador.gera();
+
+        ArgumentCaptor<Pagamento> argumento = ArgumentCaptor.forClass(Pagamento.class);
+        verify(pagamentos).salva(argumento.capture());
+        Pagamento pagamentoGerado = argumento.getValue();
+
+        int diaDaSemana = pagamentoGerado.getData().get(Calendar.DAY_OF_WEEK);
+        assertEquals(Calendar.MONDAY, diaDaSemana);
+        assertEquals(9, pagamentoGerado.getData().get(Calendar.DAY_OF_MONTH));
+    }
+
+    @Test
+    public void deveEmpurrarDomingoParaOProximoDiaUtil(){
+        RepositorioDeLeiloes leiloes = mock(RepositorioDeLeiloes.class);
+        RepositorioDePagamentos pagamentos = mock(RepositorioDePagamentos.class);
+        Relogio relogio = mock(Relogio.class);
+
+        Calendar domingo = Calendar.getInstance();
+        domingo.set(2012, Calendar.APRIL, 8);
+
+        when(relogio.hoje()).thenReturn(domingo);
 
         Leilao leilao = new CriadorDeLeilao()
                 .para("Playstation")
